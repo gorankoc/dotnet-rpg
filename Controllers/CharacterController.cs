@@ -1,16 +1,20 @@
 using Microsoft.AspNetCore.Mvc;
-using dotnet_rpg.Models; 
+using dotnet_rpg.Models;
 using dotnet_rpg.Services.CharacterService;
 using System.Threading.Tasks;
+using dotnet_rpg.Dtos.Character;
+using System.Collections.Generic;
 
-namespace dotnet_rpg.Controllers{
-																	
-	[ApiController] 																			// ApiController attribute type also derived types is use to serve http Api responses, enables few feautres, Routeing, automatic http 400 responses when making web service call, defines how is going to be able to
-	[Route("[controller]")] 																	// find this specific controller string "[controller]" -> means that we can acces by using class name without Controller suffix derive from ControlerBase ( ctrl without view support ) since building api only, for view = Controller
-	public class CharacterController: ControllerBase{
-		
+namespace dotnet_rpg.Controllers
+{
+
+	[ApiController]                                                                             // ApiController attribute type also derived types is use to serve http Api responses, enables few feautres, Routeing, automatic http 400 responses when making web service call, defines how is going to be able to
+	[Route("[controller]")]                                                                     // find this specific controller string "[controller]" -> means that we can acces by using class name without Controller suffix derive from ControlerBase ( ctrl without view support ) since building api only, for view = Controller
+	public class CharacterController : ControllerBase
+	{
+
 		private readonly ICharacterService _characterService;
- 			
+
 		public CharacterController(ICharacterService characterService)
 		{
 			// 1. ctor
@@ -20,24 +24,53 @@ namespace dotnet_rpg.Controllers{
 
 			_characterService = characterService; // _ means field name
 		}
-	 
+
 		[HttpGet("GetAll")]
-		public async Task<IActionResult> Get(){									
+		public async Task<IActionResult> Get()
+		{
 			// 5. replace previouse body of non DTO model Get() with service methods
-			return Ok(await _characterService.GetAllCharacters()); 									// Ok = 200, BadRequest = 400, NotFound = 404 method
+			return Ok(await _characterService.GetAllCharacters());                                  // Ok = 200, BadRequest = 400, NotFound = 404 method
 		}
 
-		[HttpGet("{id}")]
-		public async Task<IActionResult> GetSingle(int id)											// GetSingle() works but webapi doesnt know wich Get meth to use. add attr [Route("GetAll")] instead of upper Get(); req.method
+		[HttpGet("{id}")] 
+		public async Task<IActionResult> GetSingle(int id)                                          // GetSingle() works but webapi doesnt know wich Get meth to use. add attr [Route("GetAll")] instead of upper Get(); req.method
 		{
-			return Ok(await _characterService.GetCharacterByID(id)); 			
+			return Ok(await _characterService.GetCharacterByID(id));
 		}
 
 		[HttpPost]
-		public async Task<IActionResult> AddCharacter(Character newCharacter){
-			 return Ok(await _characterService.AddCharacter(newCharacter));
+		public async Task<IActionResult> AddCharacter(AddCharacterDto newCharacter)
+		{
+			return Ok(await _characterService.AddCharacter(newCharacter));
 		}
-	}
+
+
+		[HttpPut]
+		public async Task<IActionResult> UpdateCharacter(UpdateCharacterDto updatedCharacter)
+		{
+
+			ServiceResponse<GetCharacterDto> response = await _characterService.UpdateCharacter(updatedCharacter);
+
+			if (response.Data == null)
+			{
+				return NotFound(response);
+			}
+
+			return Ok(await _characterService.UpdateCharacter(updatedCharacter));
+		}
+
+		[HttpDelete("{id}")]
+        public async Task<IActionResult> Delete(int id)
+        {
+            ServiceResponse<List<GetCharacterDto>> response = await _characterService.DeleteCharacter(id);
+            if (response.Data == null)
+            {
+                return NotFound(response);
+            }
+            return Ok(response);
+        }
+
+	} 
 }
 
 /*
