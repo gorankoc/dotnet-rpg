@@ -12,7 +12,6 @@ namespace dotnet_rpg.Controllers
 	[Route("[controller]")]                                                                     // find this specific controller string "[controller]" -> means that we can acces by using class name without Controller suffix derive from ControlerBase ( ctrl without view support ) since building api only, for view = Controller
 	public class CharacterController : ControllerBase
 	{
-
 		private readonly ICharacterService _characterService;
 
 		public CharacterController(ICharacterService characterService)
@@ -44,18 +43,14 @@ namespace dotnet_rpg.Controllers
 			return Ok(await _characterService.AddCharacter(newCharacter));
 		}
 
-
 		[HttpPut]
 		public async Task<IActionResult> UpdateCharacter(UpdateCharacterDto updatedCharacter)
 		{
-
 			ServiceResponse<GetCharacterDto> response = await _characterService.UpdateCharacter(updatedCharacter);
 
-			if (response.Data == null)
-			{
+			if (response.Data == null){
 				return NotFound(response);
 			}
-
 			return Ok(await _characterService.UpdateCharacter(updatedCharacter));
 		}
 
@@ -63,13 +58,11 @@ namespace dotnet_rpg.Controllers
         public async Task<IActionResult> Delete(int id)
         {
             ServiceResponse<List<GetCharacterDto>> response = await _characterService.DeleteCharacter(id);
-            if (response.Data == null)
-            {
+            if (response.Data == null){
                 return NotFound(response);
             }
             return Ok(response);
         }
-
 	} 
 }
 

@@ -10,17 +10,15 @@ namespace dotnet_rpg.Services.CharacterService
 {
 	public class CharacterService : ICharacterService
 	{
+		private readonly IMapper _mapper;
 		private static readonly List<Character> characters = new List<Character>(){
 			new Character(),
 			new Character { Id = 1, Name = "Sam"}
 		};
-
-		private readonly IMapper _mapper;
-		public CharacterService(IMapper mapper)
-		{
+		
+		public CharacterService(IMapper mapper){
 			_mapper = mapper;
 		}
-
 		public async Task<ServiceResponse<List<GetCharacterDto>>> AddCharacter(AddCharacterDto newCharacter)
 		{
 			ServiceResponse<List<GetCharacterDto>> serviceResponse = new ServiceResponse<List<GetCharacterDto>>();
