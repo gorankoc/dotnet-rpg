@@ -70,8 +70,4 @@ and
 
 			return serviceResponse;
 		}
-
-	
-
-
 */

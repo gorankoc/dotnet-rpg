@@ -16,12 +16,8 @@ namespace dotnet_rpg.Controllers
 
 		public CharacterController(ICharacterService characterService)
 		{
-			// 1. ctor
-			// 2. create and assing field ctrl + .
-			// 3. delete this ... add _ meaning field
 			// 4. POSTMAN TEST !!! 500 error ... documented at boottom of .cs
-
-			_characterService = characterService; // _ means field name
+			_characterService = characterService;  
 		}
 
 		[HttpGet("GetAll")]
