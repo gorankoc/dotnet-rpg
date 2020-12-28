@@ -4,10 +4,14 @@ using dotnet_rpg.Services.CharacterService;
 using System.Threading.Tasks;
 using dotnet_rpg.Dtos.Character;
 using System.Collections.Generic;
+using Microsoft.AspNetCore.Authorization;
+using System.Linq;
+using System.Security.Claims;
 
 namespace dotnet_rpg.Controllers
 {
 
+	[Authorize]
 	[ApiController]                                                                             // ApiController attribute type also derived types is use to serve http Api responses, enables few feautres, Routeing, automatic http 400 responses when making web service call, defines how is going to be able to
 	[Route("[controller]")]                                                                     // find this specific controller string "[controller]" -> means that we can acces by using class name without Controller suffix derive from ControlerBase ( ctrl without view support ) since building api only, for view = Controller
 	public class CharacterController : ControllerBase
@@ -23,8 +27,9 @@ namespace dotnet_rpg.Controllers
 		[HttpGet("GetAll")]
 		public async Task<IActionResult> Get()
 		{
+			int userId = int.Parse(User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier).Value);
 			// 5. replace previouse body of non DTO model Get() with service methods
-			return Ok(await _characterService.GetAllCharacters());                                  // Ok = 200, BadRequest = 400, NotFound = 404 method
+			return Ok(await _characterService.GetAllCharacters(userId));                                  // Ok = 200, BadRequest = 400, NotFound = 404 method
 		}
 
 		[HttpGet("{id}")] 

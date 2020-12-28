@@ -14,6 +14,9 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using dotnet_rpg.Data;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.IdentityModel.Tokens;
+using System.Text;
 
 namespace dotnet_rpg
 {
@@ -35,6 +38,18 @@ namespace dotnet_rpg
 			services.AddAutoMapper(typeof(Startup));
 			services.AddScoped<ICharacterService, CharacterService>();
 			services.AddScoped<IAuthRepository, AuthRepository>();
+			services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+					.AddJwtBearer(options => 
+					{
+						options.TokenValidationParameters = new TokenValidationParameters
+						{
+							ValidateIssuerSigningKey = true,
+							IssuerSigningKey = new SymmetricSecurityKey(Encoding.ASCII.GetBytes(
+								Configuration.GetSection("AppSettings:Token").Value)),
+								ValidateIssuer = false,
+								ValidateAudience = false
+						};
+					});
         }
 
         // This method gets called by the runtime. 
@@ -49,7 +64,7 @@ namespace dotnet_rpg
             // app.UseHttpsRedirection(); used for from http to https
 
             app.UseRouting();
-
+			app.UseAuthentication();
             app.UseAuthorization();
 
             app.UseEndpoints(endpoints =>
