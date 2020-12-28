@@ -30,6 +30,7 @@ namespace dotnet_rpg.Services.CharacterService
 			ServiceResponse<List<GetCharacterDto>> serviceResponse = new ServiceResponse<List<GetCharacterDto>>();
 
 			Character character = _mapper.Map<Character>(newCharacter);
+			character.Id = characters.Max(c => c.Id) +1;
 			 
 			await _context.Characters.AddAsync(character);
 			await _context.SaveChangesAsync();
