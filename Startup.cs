@@ -17,6 +17,8 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
+using Microsoft.AspNetCore.Http;
+using dotnet_rpg.Services.WeaponService;
 
 namespace dotnet_rpg
 {
@@ -50,6 +52,8 @@ namespace dotnet_rpg
 								ValidateAudience = false
 						};
 					});
+			services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
+			services.AddScoped<IWeaponService, WeaponService>();
         }
 
         // This method gets called by the runtime. 
@@ -61,7 +65,7 @@ namespace dotnet_rpg
                 app.UseDeveloperExceptionPage();
             }
 
-            // app.UseHttpsRedirection(); used for from http to https
+            //app.UseHttpsRedirection(); used for from http to https
 
             app.UseRouting();
 			app.UseAuthentication();

@@ -23,9 +23,9 @@ namespace dotnet_rpg.Controllers {
  
 		[HttpGet("GetAll")]
 		public async Task<IActionResult> Get() {
-			int userId = int.Parse(User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier).Value);
+			//int userId = int.Parse(User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier).Value);
 			// 5. replace previouse body of non DTO model Get() with service methods
-			return Ok(await _characterService.GetAllCharacters(userId));                                    // Ok = 200, BadRequest = 400, NotFound = 404 method
+			return Ok(await _characterService.GetAllCharacters());                                    // Ok = 200, BadRequest = 400, NotFound = 404 method
 		}
 
 		[HttpGet("{id}")]
@@ -36,6 +36,7 @@ namespace dotnet_rpg.Controllers {
 
 		[HttpPost]
 		public async Task<IActionResult> AddCharacter(AddCharacterDto newCharacter) {
+			
 			return Ok(await _characterService.AddCharacter(newCharacter));
 		}
 
