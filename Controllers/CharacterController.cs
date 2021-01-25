@@ -42,7 +42,7 @@ namespace dotnet_rpg.Controllers {
 
 		[HttpPut]
 		public async Task<IActionResult> UpdateCharacter(UpdateCharacterDto updatedCharacter) {
-			ServiceResponse<GetCharacterDto> response = await _characterService.UpdateCharacter(updatedCharacter);
+			var response = await _characterService.UpdateCharacter(updatedCharacter);
 
 			if (response.Data == null) {
 				return NotFound(response);
@@ -52,7 +52,7 @@ namespace dotnet_rpg.Controllers {
 
 		[HttpDelete("{id}")]
 		public async Task<IActionResult> Delete(int id) {
-			ServiceResponse<List<GetCharacterDto>> response = await _characterService.DeleteCharacter(id);
+			var response = await _characterService.DeleteCharacter(id);
 			if (response.Data == null) {
 				return NotFound(response);
 			}

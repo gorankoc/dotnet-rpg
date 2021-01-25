@@ -19,6 +19,7 @@ using Microsoft.IdentityModel.Tokens;
 using System.Text;
 using Microsoft.AspNetCore.Http;
 using dotnet_rpg.Services.WeaponService;
+using dotnet_rpg.Services.CharacterSkillService;
 
 namespace dotnet_rpg
 {
@@ -54,6 +55,7 @@ namespace dotnet_rpg
 					});
 			services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
 			services.AddScoped<IWeaponService, WeaponService>();
+			services.AddScoped<ICharacterSkillService, CharacterSkillService>();
         }
 
         // This method gets called by the runtime. 
